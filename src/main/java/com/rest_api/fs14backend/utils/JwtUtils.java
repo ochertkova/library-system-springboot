@@ -1,6 +1,8 @@
-/* package com.rest_api.fs14backend.utils;
+ package com.rest_api.fs14backend.utils;
 
-import com.rest_api.fs14backend.user.User;
+public class JwtUtils {
+}
+/*import com.rest_api.fs14backend.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

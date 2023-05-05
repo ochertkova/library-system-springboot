@@ -1,18 +1,17 @@
-package com.rest_api.fs14backend.author;
+package com.rest_api.fs14backend.category;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "authors")
+@Table(name = "categories")
 @Data
 @NoArgsConstructor
-public class Author {
+public class Category {
     @Id
     @GeneratedValue
     @UuidGenerator
@@ -20,5 +19,4 @@ public class Author {
 
     @Column
     private String name;
-
 }
