@@ -1,4 +1,4 @@
-package com.rest_api.fs14backend.utils;
+/* package com.rest_api.fs14backend.utils;
 
 import com.rest_api.fs14backend.user.User;
 import io.jsonwebtoken.Claims;
@@ -62,3 +62,4 @@ public class JwtUtils {
     return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
   }
 }
+*/
