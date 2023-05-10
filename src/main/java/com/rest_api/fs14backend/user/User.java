@@ -1,7 +1,6 @@
 package com.rest_api.fs14backend.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.rest_api.fs14backend.book.Book;
 import com.rest_api.fs14backend.loan.Loan;
 import jakarta.persistence.*;
 import lombok.Data;

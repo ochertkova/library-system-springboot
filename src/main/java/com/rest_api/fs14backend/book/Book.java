@@ -1,5 +1,7 @@
 package com.rest_api.fs14backend.book;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.rest_api.fs14backend.author.Author;
 import com.rest_api.fs14backend.category.Category;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -56,7 +59,10 @@ public class Book {
         BORROWED,
         AVAILABLE
     }
-
+    @ManyToMany
+    @JoinTable(name = "book_authors")
+    @JsonIgnoreProperties("authors")
+    private List<Author> authorsList;
     public Book(UUID id, long ISBN, String title, Date publishedDate, String description, Status status, String publisher) {
         this.id = id;
         this.ISBN = ISBN;
