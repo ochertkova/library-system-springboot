@@ -4,7 +4,6 @@ import com.rest_api.fs14backend.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
 import java.util.UUID;
 
@@ -12,14 +11,22 @@ import java.util.UUID;
 public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepo;
+
     public Category addOne(Category category) {
         return categoryRepo.save(category);
     }
+
     public List<Category> getAllCategories() {
         return categoryRepo.findAll();
     }
 
-    public Category findById(UUID categoryId){return categoryRepo.findById(categoryId).orElse(null);}
+    public Category findById(UUID categoryId) {
+        return categoryRepo.findById(categoryId).orElse(null);
+    }
+
+    public Category findByName(String categoryName) {
+        return categoryRepo.findByName(categoryName);
+    }
 
     public void deleteById(UUID categoryId) {
         if (categoryRepo.findById(categoryId).isPresent()) {

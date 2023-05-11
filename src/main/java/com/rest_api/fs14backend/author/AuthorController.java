@@ -27,6 +27,7 @@ public class AuthorController {
     public Optional<Author> getAuthorById(@PathVariable("id") UUID id) {
         return Optional.ofNullable(authorService.findById(id));
     }
+
     @DeleteMapping(path="/{id}")
     public void deleteAuthorById(@PathVariable("id") UUID id){
         authorService.deleteById(id);

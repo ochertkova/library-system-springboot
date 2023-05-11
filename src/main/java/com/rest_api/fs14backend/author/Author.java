@@ -23,7 +23,6 @@ public class Author {
     @Column
     private String name;
     @ManyToMany(mappedBy="authors",fetch= FetchType.LAZY)
-    @JsonIgnoreProperties("books")
+    @JsonIgnoreProperties("authors")
     private List<Book> books;
-
 }

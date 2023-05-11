@@ -19,6 +19,10 @@ public class AuthorService {
         return authorRepo.findAll();
     }
     public Author findById(UUID authorId){return authorRepo.findById(authorId).orElse(null);}
+
+    public Author findByName(String authorName){
+        return authorRepo.findByName(authorName);
+    }
     public void deleteById(UUID authorId) {
         if (authorRepo.findById(authorId).isPresent()) {
             authorRepo.deleteById(authorId);

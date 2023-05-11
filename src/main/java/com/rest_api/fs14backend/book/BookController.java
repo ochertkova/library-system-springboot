@@ -18,7 +18,7 @@ public class BookController {
     }
 
     @PostMapping("/")
-    public Book addOne(@RequestBody Book book) {
+    public Book addOne(@RequestBody NewBookDTO book) {
         return bookService.addOne(book);
     }
 

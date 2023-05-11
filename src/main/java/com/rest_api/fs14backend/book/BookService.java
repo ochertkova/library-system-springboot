@@ -12,15 +12,22 @@ public class BookService {
     @Autowired
     private BookRepository bookRepo;
 
-    public Book addOne(Book book) {
-        return bookRepo.save(book);
+
+    @Autowired
+    private BookMapper bookMapper;
+
+    public Book addOne(NewBookDTO bookDto) {
+        Book newBook = bookMapper.newBookDtoToBook(bookDto);
+        return bookRepo.save(newBook);
     }
 
     public List<Book> getAllBooks() {
         return bookRepo.findAll();
     }
 
-    public Book findById(UUID bookId){return bookRepo.findById(bookId).orElse(null);}
+    public Book findById(UUID bookId) {
+        return bookRepo.findById(bookId).orElse(null);
+    }
 
     public void deleteById(UUID bookId) {
         if (bookRepo.findById(bookId).isPresent()) {
