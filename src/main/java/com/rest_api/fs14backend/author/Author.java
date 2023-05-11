@@ -1,6 +1,7 @@
 package com.rest_api.fs14backend.author;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.rest_api.fs14backend.book.Book;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,9 +22,8 @@ public class Author {
 
     @Column
     private String name;
-    @ManyToMany
-    @JoinTable(name = "book_authors")
+    @ManyToMany(mappedBy="authors",fetch= FetchType.LAZY)
     @JsonIgnoreProperties("books")
-    private List<Author> authorsList;
+    private List<Book> books;
 
 }

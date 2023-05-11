@@ -10,6 +10,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -28,13 +29,6 @@ public class Book {
 
     @Column
     private String title;
-    @Column
-    private String authors;
-
-    /*
-    @ManyToMany
-    @JoinTable(name=book_author)
-     */
 
     @Column(nullable = true)
     private String publisher;
@@ -51,7 +45,7 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -59,10 +53,14 @@ public class Book {
         BORROWED,
         AVAILABLE
     }
+
     @ManyToMany
-    @JoinTable(name = "book_authors")
+    @JoinTable(name = "book_authors",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
     @JsonIgnoreProperties("authors")
-    private List<Author> authorsList;
+    private List<Author> authors;
+
     public Book(UUID id, long ISBN, String title, Date publishedDate, String description, Status status, String publisher) {
         this.id = id;
         this.ISBN = ISBN;

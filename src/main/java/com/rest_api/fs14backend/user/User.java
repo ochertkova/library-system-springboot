@@ -24,13 +24,8 @@ public class User {
     private String name;
     private boolean isAdmin;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     @JsonIgnoreProperties("user")
     private List<Loan> loans;
-
-    /*
-    @ManyToMany
-    @JoinTable(name="USER_LOANS")
-    private List<Book> myLoans;*/
 
 }
