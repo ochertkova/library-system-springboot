@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Data
 public class NewBookDTO {
-    @JsonProperty("ISBN")
+    @JsonProperty("isbn")
     private long ISBN;
     @JsonProperty("title")
     private String title;
