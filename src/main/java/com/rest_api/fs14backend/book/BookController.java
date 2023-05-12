@@ -6,6 +6,10 @@ import com.rest_api.fs14backend.category.Category;
 import com.rest_api.fs14backend.category.CategoryService;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +33,10 @@ public class BookController {
     private BookMapper bookMapper;
 
     @GetMapping
-    public List<BookDTO> getAll() {
+    public List<BookDTO> getAll(@AuthenticationPrincipal UserDetails authUser) {
+        System.out.println("User details");
+        System.out.println(authUser);
+
         return bookService.getAllBooks().stream().map(bookMapper::toDto).toList();
     }
 
@@ -48,8 +55,8 @@ public class BookController {
     }
 
     @PostMapping("/{id}/borrow")
-    public Book borrowBook(@PathVariable("id") UUID id){
-        return bookService.borrowBook(id, UUID.fromString("e88a6b6b-1ad7-4a6c-9d68-60b123127849"));
+    public Book borrowBook(@PathVariable("id") UUID id, @AuthenticationPrincipal UserDetails authUser){
+        return bookService.borrowBook(id, UUID.fromString("609a808e-5233-48e0-b63d-83b6761110ae"));
     }
 
     @GetMapping(path="/{id}")

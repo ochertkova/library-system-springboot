@@ -1,8 +1,5 @@
 package com.rest_api.fs14backend.user;
-
-import com.rest_api.fs14backend.book.Book;
 import com.rest_api.fs14backend.book.BookDTO;
-import com.rest_api.fs14backend.loan.Loan;
 
 import java.time.OffsetDateTime;
 

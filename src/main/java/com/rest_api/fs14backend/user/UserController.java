@@ -2,7 +2,11 @@ package com.rest_api.fs14backend.user;
 
 import com.rest_api.fs14backend.book.BookDTO;
 import com.rest_api.fs14backend.book.BookMapper;
+import com.rest_api.fs14backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +17,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("api/v1/users")
 public class UserController {
+
+
     @Autowired
     private UserService userService;
 
@@ -20,6 +26,7 @@ public class UserController {
     private UserMapper userMapper;
     @Autowired
     private BookMapper bookMapper;
+
 
     @PostMapping("/")
     public User addOne(@RequestBody User user) {
@@ -52,4 +59,6 @@ public class UserController {
     public void deleteUserById(@PathVariable("id") UUID id) {
         userService.deleteById(id);
     }
+
+
 }

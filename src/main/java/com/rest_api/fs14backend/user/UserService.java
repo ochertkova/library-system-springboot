@@ -24,6 +24,10 @@ public class UserService {
         return userRepo.findById(userId).orElse(null);
     }
 
+    public User findByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
+
     public void deleteById(UUID userId) {
         if (userRepo.findById(userId).isPresent()) {
             userRepo.deleteById(userId);

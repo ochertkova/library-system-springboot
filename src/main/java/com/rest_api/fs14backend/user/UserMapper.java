@@ -2,7 +2,6 @@ package com.rest_api.fs14backend.user;
 
 import com.rest_api.fs14backend.book.BookDTO;
 import com.rest_api.fs14backend.book.BookMapper;
-import com.rest_api.fs14backend.loan.Loan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

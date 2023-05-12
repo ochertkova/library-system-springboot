@@ -1,6 +1,7 @@
 package com.rest_api.fs14backend.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rest_api.fs14backend.loan.Loan;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -22,6 +23,9 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String username;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
 
     @Column(nullable = false)
     private String name;
