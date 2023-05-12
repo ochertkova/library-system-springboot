@@ -3,11 +3,10 @@ package com.rest_api.fs14backend.book;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Data
-public class NewBookDTO {
+public class BookDTO {
     @JsonProperty("isbn")
     private long ISBN;
     @JsonProperty("title")
@@ -17,7 +16,7 @@ public class NewBookDTO {
     @JsonProperty("description")
     private String description;
     @JsonProperty("publishedDate")
-    private Date publishedDate;
+    private String publishedDate;
     @JsonProperty("bookCoverLink")
     private String bookCoverLink;
     @JsonProperty("status")
@@ -25,5 +24,16 @@ public class NewBookDTO {
     @JsonProperty("category")
     private String category;
     @JsonProperty("authors")
-    private Set<String> authors;
+    private List<String> authors;
+
+    public BookDTO(long ISBN, String title, String publisher, String description, String bookCoverLink, String status, String category, List<String> authors) {
+        this.ISBN = ISBN;
+        this.title = title;
+        this.publisher = publisher;
+        this.description = description;
+        this.bookCoverLink = bookCoverLink;
+        this.status = status;
+        this.category = category;
+        this.authors = authors;
+    }
 }

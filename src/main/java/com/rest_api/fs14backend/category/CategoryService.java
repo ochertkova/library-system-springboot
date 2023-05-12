@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,7 +25,7 @@ public class CategoryService {
         return categoryRepo.findById(categoryId).orElse(null);
     }
 
-    public Category findByName(String categoryName) {
+    public Optional<Category> findByName(String categoryName) {
         return categoryRepo.findByName(categoryName);
     }
 

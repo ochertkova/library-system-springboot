@@ -21,10 +21,17 @@ public class User {
     private UUID id;
 
     @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String email;
+
     private boolean isAdmin;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnoreProperties("user")
     private List<Loan> loans;
 

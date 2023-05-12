@@ -19,15 +19,22 @@ public class Loan {
     @UuidGenerator
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="user_id")
     private User user;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name="book_id")
     private Book book;
 
     @Column
     private OffsetDateTime borrowDate;
     private OffsetDateTime returnDate;
+    private OffsetDateTime returnedDate;
 
+    public Loan(User user, Book book, OffsetDateTime borrowDate, OffsetDateTime returnDate) {
+        this.user = user;
+        this.book = book;
+        this.borrowDate = borrowDate;
+        this.returnDate = returnDate;
+    }
 }

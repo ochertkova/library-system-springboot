@@ -6,6 +6,7 @@ import com.rest_api.fs14backend.category.Category;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Date;
@@ -33,6 +34,7 @@ public class Book {
     private String publisher;
 
     @Column(nullable = true)
+    @Setter
     private Date publishedDate;
 
     @Column(nullable = true)
@@ -46,34 +48,12 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @Setter
     private Category category;
-
-    public static Book fromDto(NewBookDTO newBook, Category category, List<Author> authors) {
-        Book book = new Book(
-                null,
-                newBook.getISBN(),
-                newBook.getTitle(),
-                null,
-                newBook.getDescription(),
-                Status.valueOf(newBook.getStatus()),
-                newBook.getPublisher()
-        );
-        book.setCategory(category);
-        book.setAuthors(authors);
-        return book;
-    }
 
     enum Status {
         BORROWED,
         AVAILABLE
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
     }
 
     @ManyToMany(fetch= FetchType.LAZY)
@@ -81,13 +61,12 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     @JsonIgnoreProperties("books")
+    @Setter
     private List<Author> authors;
 
-    public Book(UUID id, long ISBN, String title, Date publishedDate, String description, Status status, String publisher) {
-        this.id = id;
+    public Book(long ISBN, String title, String description, Status status, String publisher) {
         this.ISBN = ISBN;
         this.title = title;
-        this.publishedDate = publishedDate;
         this.description = description;
         this.status = status;
         this.publisher = publisher;
