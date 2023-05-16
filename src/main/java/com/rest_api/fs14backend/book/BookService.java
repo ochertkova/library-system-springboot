@@ -1,9 +1,5 @@
 package com.rest_api.fs14backend.book;
 
-import com.rest_api.fs14backend.author.Author;
-import com.rest_api.fs14backend.author.AuthorService;
-import com.rest_api.fs14backend.category.Category;
-import com.rest_api.fs14backend.category.CategoryService;
 import com.rest_api.fs14backend.exceptions.BookUnavailableException;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import com.rest_api.fs14backend.loan.Loan;
@@ -17,7 +13,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.rest_api.fs14backend.book.Book.Status.AVAILABLE;
 import static com.rest_api.fs14backend.book.Book.Status.BORROWED;
@@ -80,6 +75,5 @@ public class BookService {
 
         return bookToBorrow;
     }
-
 }
 
