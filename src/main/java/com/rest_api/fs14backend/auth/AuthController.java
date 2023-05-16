@@ -1,9 +1,11 @@
 package com.rest_api.fs14backend.auth;
 
-import com.rest_api.fs14backend.user.*;
+import com.rest_api.fs14backend.user.User;
+import com.rest_api.fs14backend.user.UserDTO;
+import com.rest_api.fs14backend.user.UserMapper;
+import com.rest_api.fs14backend.user.UserService;
 import com.rest_api.fs14backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +34,7 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/signin")
-    public Map<String, String> login(@RequestBody AuthRequest authRequest){
+    public Map<String, String> login(@RequestBody AuthRequest authRequest) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -43,7 +45,9 @@ public class AuthController {
 
         User user = userService.findByUsername(authRequest.getUsername());
         String token = jwtUtils.generateToken(user);
-        return Map.of("token", token);
+        return Map.of("token", token,
+                "role", user.getRole().toString(),
+                "name", user.getName());
     }
 
     @PostMapping("/signup")
@@ -52,6 +56,7 @@ public class AuthController {
 
         User newUser = userMapper.toUser(userDto);
         newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        newUser.setRole(User.Role.USER);
         userService.addOne(newUser);
         return newUser;
     }

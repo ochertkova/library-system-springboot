@@ -33,10 +33,23 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    private boolean isAdmin;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public static enum Role {
+        USER,
+        ADMIN
+    }
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnoreProperties("user")
     private List<Loan> loans;
 
+    public User(String username, String password, String name, String email, Role role) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+    }
 }
