@@ -28,7 +28,8 @@ public class AuthorService {
         ));
     }
     public void deleteById(UUID authorId) {
-        if (authorRepo.findById(authorId).isPresent()) {
+        Optional<Author> authorToDelete = authorRepo.findById(authorId);;
+        if (authorToDelete.isPresent()) {
             authorRepo.deleteById(authorId);
         } else {
             throw new NotFoundException("Author not found");

@@ -9,14 +9,11 @@ import com.rest_api.fs14backend.exceptions.BookUnavailableException;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import com.rest_api.fs14backend.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -54,7 +51,7 @@ public class BookController {
                     .collect(Collectors.toList());
             Book newBook = bookMapper.toBook(bookDto, category, authors);
             return ResponseEntity.ok(bookService.addOne(newBook));
-        } catch ( NotFoundException nfe ) {
+        } catch (NotFoundException nfe) {
             return ResponseUtils.respNotFound(nfe.getMessage());
         }
     }
@@ -74,13 +71,24 @@ public class BookController {
         }
     }
 
-    @GetMapping(path="/{id}")
-    public Optional<Book> getBookById(@PathVariable("id") UUID id) {
-        return Optional.ofNullable(bookService.findById(id));
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getBookById(@PathVariable("id") UUID id) {
+        Optional<Book> payload = Optional.ofNullable(bookService.findById(id));
+        if (payload.isEmpty()) {
+            return ResponseUtils.respNotFound("Book not found");
+        }
+        return ResponseEntity.ok(payload);
     }
-    @DeleteMapping(path="/{id}")
-    public void deleteBookById(@PathVariable("id") UUID id){
-        bookService.deleteById(id);
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> deleteBookById(@PathVariable("id") UUID id) {
+        try {
+            bookService.deleteById(id);
+            return ResponseEntity.ok(null);
+        } catch (NotFoundException nfe) {
+            return ResponseUtils.respNotFound(nfe.getMessage());
+
+        }
     }
 
 }

@@ -1,6 +1,9 @@
 package com.rest_api.fs14backend.author;
 
+import com.rest_api.fs14backend.exceptions.NotFoundException;
+import com.rest_api.fs14backend.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,24 +16,38 @@ import java.util.UUID;
 public class AuthorController {
     @Autowired
     private AuthorService authorService;
+
     @GetMapping
-    public List<Author> getAll() {
-        return authorService.getAllAuthors();
+    public ResponseEntity<?> getAll() {
+        List<Author> payload = authorService.getAllAuthors();
+        if (payload == null) {
+            return ResponseUtils.respNotFound("Authors not found");
+        }
+        return ResponseEntity.ok(payload);
     }
 
     @PostMapping("/")
-    public Author addOne(@RequestBody Author author) {
-        return authorService.addOne(author);
+    public ResponseEntity<?> addOne(@RequestBody Author author) {
+        Author payload =  authorService.addOne(author);
+        return ResponseEntity.ok(payload);
     }
 
-    @GetMapping(path="/{id}")
-    public Optional<Author> getAuthorById(@PathVariable("id") UUID id) {
-        return Optional.ofNullable(authorService.findById(id));
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getAuthorById(@PathVariable("id") UUID id) {
+        Optional<Author> payload = Optional.ofNullable(authorService.findById(id));
+        if (payload.isEmpty()) {
+            return ResponseUtils.respNotFound("Author not found");
+        }
+        return ResponseEntity.ok(payload);
     }
 
-    @DeleteMapping(path="/{id}")
-    public void deleteAuthorById(@PathVariable("id") UUID id){
-        authorService.deleteById(id);
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> deleteAuthorById(@PathVariable("id") UUID id) {
+        try {
+          authorService.deleteById(id);
+          return ResponseEntity.ok(null);
+        } catch (NotFoundException nfe) {
+            return ResponseUtils.respNotFound(nfe.getMessage());
+        }
     }
-
 }

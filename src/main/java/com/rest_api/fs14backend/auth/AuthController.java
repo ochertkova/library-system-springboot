@@ -7,7 +7,6 @@ import com.rest_api.fs14backend.user.UserService;
 import com.rest_api.fs14backend.utils.JwtUtils;
 import com.rest_api.fs14backend.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -38,20 +36,22 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/signin")
-    public Map<String, String> login(@RequestBody AuthRequest authRequest) {
-
+    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+        User user = userService.findByUsername(authRequest.getUsername());
+        if(user == null){
+            return ResponseUtils.respNotFound("Username was not found. Please sign up");
+        }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authRequest.getUsername(),
                         authRequest.getPassword()
                 )
         );
-
-        User user = userService.findByUsername(authRequest.getUsername());
         String token = jwtUtils.generateToken(user);
-        return Map.of("token", token,
+        Map<String, String> payload = Map.of("token", token,
                 "role", user.getRole().toString(),
                 "name", user.getName());
+        return ResponseEntity.ok(payload);
     }
 
     @PostMapping("/signup")
