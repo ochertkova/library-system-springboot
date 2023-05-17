@@ -64,7 +64,6 @@ public class BookService {
         Book bookToBorrow = validateBookToBorrow(bookId);
         bookToBorrow.setStatus(BORROWED);
 
-
         OffsetDateTime borrowDate = OffsetDateTime.now();
         OffsetDateTime returnDate = OffsetDateTime.now().plusWeeks(2);
 

@@ -40,6 +40,7 @@ public class BookMapper {
                 .map(Author::getName)
                 .collect(Collectors.toList());
         BookDTO dto = new BookDTO(
+                book.getId(),
                 book.getISBN(),
                 book.getTitle(),
                 book.getPublisher(),

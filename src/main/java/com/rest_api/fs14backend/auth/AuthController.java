@@ -6,6 +6,8 @@ import com.rest_api.fs14backend.user.UserMapper;
 import com.rest_api.fs14backend.user.UserService;
 import com.rest_api.fs14backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -51,13 +54,15 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public User signup(@RequestBody UserDTO userDto) {
-        // TODO: check that username & email is available
-
+    public ResponseEntity<?> signup(@RequestBody UserDTO userDto) {
+        if (userService.findByUsername(userDto.getUsername()) != null) {
+            Map<String, String> message = Map.of("message", "Username is already reserved");
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        }
         User newUser = userMapper.toUser(userDto);
         newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         newUser.setRole(User.Role.USER);
         userService.addOne(newUser);
-        return newUser;
+        return ResponseEntity.ok(newUser);
     }
 }

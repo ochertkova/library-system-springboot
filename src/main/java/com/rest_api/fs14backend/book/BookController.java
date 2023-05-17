@@ -5,14 +5,17 @@ import com.rest_api.fs14backend.author.Author;
 import com.rest_api.fs14backend.author.AuthorService;
 import com.rest_api.fs14backend.category.Category;
 import com.rest_api.fs14backend.category.CategoryService;
+import com.rest_api.fs14backend.exceptions.BookUnavailableException;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -52,8 +55,21 @@ public class BookController {
     }
 
     @PostMapping("/{id}/borrow")
-    public Book borrowBook(@PathVariable("id") UUID id, @AuthenticationPrincipal LibraryUserDetails authUser) {
-        return bookService.borrowBook(id, authUser.getUserId());
+    public ResponseEntity<?> borrowBook(@PathVariable("id") String pathId, @AuthenticationPrincipal LibraryUserDetails authUser) {
+        try {
+            UUID bookId = UUID.fromString(pathId);
+            Book borrowedBook = bookService.borrowBook(bookId, authUser.getUserId());
+            return ResponseEntity.ok(borrowedBook);
+        } catch (IllegalArgumentException iea) {
+            Map<String, String> payload = Map.of("message", "Invalid book id");
+            return new ResponseEntity<>(payload, HttpStatus.BAD_REQUEST);
+        } catch (NotFoundException nfe) {
+            Map<String, String> payload = Map.of("message", "Book not found");
+            return new ResponseEntity<>(payload, HttpStatus.NOT_FOUND);
+        } catch (BookUnavailableException bue) {
+            Map<String, String> payload = Map.of("message", "Book is unavailable");
+            return new ResponseEntity<>(payload, HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping(path="/{id}")

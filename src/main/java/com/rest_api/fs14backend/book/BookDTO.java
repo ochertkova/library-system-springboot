@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class BookDTO {
+    @JsonProperty("id")
+    private UUID id;
     @JsonProperty("isbn")
     private long ISBN;
     @JsonProperty("title")
@@ -26,7 +29,8 @@ public class BookDTO {
     @JsonProperty("authors")
     private List<String> authors;
 
-    public BookDTO(long ISBN, String title, String publisher, String description, String bookCoverLink, String status, String category, List<String> authors) {
+    public BookDTO(UUID id, long ISBN, String title, String publisher, String description, String bookCoverLink, String status, String category, List<String> authors) {
+        this.id = id;
         this.ISBN = ISBN;
         this.title = title;
         this.publisher = publisher;
