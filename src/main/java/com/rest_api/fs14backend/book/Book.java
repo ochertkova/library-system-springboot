@@ -99,4 +99,10 @@ public class Book {
     public String getPublisher() {
         return publisher;
     }
+
+    public boolean matchesSearch(String search) {
+        String searchLowerCase = search.toLowerCase();
+        return this.getTitle().toLowerCase().contains(searchLowerCase)
+                || this.getDescription().toLowerCase().contains(searchLowerCase);
+    }
 }

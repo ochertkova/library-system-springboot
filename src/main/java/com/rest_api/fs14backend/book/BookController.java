@@ -8,6 +8,7 @@ import com.rest_api.fs14backend.category.CategoryService;
 import com.rest_api.fs14backend.exceptions.BookUnavailableException;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import com.rest_api.fs14backend.utils.ResponseUtils;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,8 +35,17 @@ public class BookController {
     private BookMapper bookMapper;
 
     @GetMapping
-    public List<BookDTO> getAll() {
-        return bookService.getAllBooks().stream().map(bookMapper::toDto).toList();
+    public List<BookDTO> getAll(@RequestParam @Nullable final String search) {
+        List<Book> result;
+        if ( search == null) {
+            result = bookService.getAllBooks();
+        } else {
+            result = bookService.searchBooks(search);
+        }
+
+        return result.stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 
     @PostMapping("/")

@@ -1,6 +1,5 @@
 package com.rest_api.fs14backend.book;
 
-import com.rest_api.fs14backend.author.Author;
 import com.rest_api.fs14backend.exceptions.BookUnavailableException;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import com.rest_api.fs14backend.loan.Loan;
@@ -36,20 +35,22 @@ public class BookService {
     public List<Book> getAllBooks() {
         return bookRepo.findAll();
     }
+    public List<Book> searchBooks(String search) {
+        return bookRepo.searchBooks(search.toLowerCase());
+    }
+
 
     public Book findById(UUID bookId) {
         return bookRepo.findById(bookId).orElse(null);
     }
 
-    public Optional<Book> deleteById(UUID bookId) {
+    public void deleteById(UUID bookId) {
         Optional<Book> bookToDelete;
         if (bookRepo.findById(bookId).isPresent()) {
-            bookToDelete = bookRepo.findById(bookId);
             bookRepo.deleteById(bookId);
         } else {
             throw new NotFoundException("Book not found");
         }
-        return bookToDelete;
     }
 
     private Book validateBookToBorrow(UUID bookId) {
