@@ -7,6 +7,7 @@ import com.rest_api.fs14backend.category.Category;
 import com.rest_api.fs14backend.category.CategoryService;
 import com.rest_api.fs14backend.exceptions.BookUnavailableException;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
+import com.rest_api.fs14backend.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,14 +62,11 @@ public class BookController {
             Book borrowedBook = bookService.borrowBook(bookId, authUser.getUserId());
             return ResponseEntity.ok(borrowedBook);
         } catch (IllegalArgumentException iea) {
-            Map<String, String> payload = Map.of("message", "Invalid book id");
-            return new ResponseEntity<>(payload, HttpStatus.BAD_REQUEST);
+            return ResponseUtils.respBadRequest("Invalid book id");
         } catch (NotFoundException nfe) {
-            Map<String, String> payload = Map.of("message", "Book not found");
-            return new ResponseEntity<>(payload, HttpStatus.NOT_FOUND);
+            return ResponseUtils.respNotFound("Book not found");
         } catch (BookUnavailableException bue) {
-            Map<String, String> payload = Map.of("message", "Book is unavailable");
-            return new ResponseEntity<>(payload, HttpStatus.CONFLICT);
+            return ResponseUtils.respConflict("Book is unavailable");
         }
     }
 

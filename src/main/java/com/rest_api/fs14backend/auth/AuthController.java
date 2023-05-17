@@ -5,6 +5,7 @@ import com.rest_api.fs14backend.user.UserDTO;
 import com.rest_api.fs14backend.user.UserMapper;
 import com.rest_api.fs14backend.user.UserService;
 import com.rest_api.fs14backend.utils.JwtUtils;
+import com.rest_api.fs14backend.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,8 +57,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody UserDTO userDto) {
         if (userService.findByUsername(userDto.getUsername()) != null) {
-            Map<String, String> message = Map.of("message", "Username is already reserved");
-            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+            return ResponseUtils.respBadRequest("Username is already reserved");
         }
         User newUser = userMapper.toUser(userDto);
         newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
