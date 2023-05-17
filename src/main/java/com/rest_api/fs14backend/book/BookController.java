@@ -42,17 +42,21 @@ public class BookController {
     }
 
     @PostMapping("/")
-    public Book addOne(@RequestBody BookDTO bookDto) {
-        Category category = categoryService
-                .findByName(bookDto.getCategory())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found", new NotFoundException("Category not found")));
-        List<Author> authors = bookDto
-                .getAuthors()
-                .stream()
-                .map(authorService::findByName)
-                .collect(Collectors.toList());
-        Book newBook = bookMapper.toBook(bookDto, category, authors);
-        return bookService.addOne(newBook);
+    public ResponseEntity<?> addOne(@RequestBody BookDTO bookDto) {
+        try {
+            Category category = categoryService
+                    .findByName(bookDto.getCategory())
+                    .orElseThrow(() -> new NotFoundException("Category not found"));
+            List<Author> authors = bookDto
+                    .getAuthors()
+                    .stream()
+                    .map(authorService::findByName)
+                    .collect(Collectors.toList());
+            Book newBook = bookMapper.toBook(bookDto, category, authors);
+            return ResponseEntity.ok(bookService.addOne(newBook));
+        } catch ( NotFoundException nfe ) {
+            return ResponseUtils.respNotFound(nfe.getMessage());
+        }
     }
 
     @PostMapping("/{id}/borrow")
@@ -64,7 +68,7 @@ public class BookController {
         } catch (IllegalArgumentException iea) {
             return ResponseUtils.respBadRequest("Invalid book id");
         } catch (NotFoundException nfe) {
-            return ResponseUtils.respNotFound("Book not found");
+            return ResponseUtils.respNotFound(nfe.getMessage());
         } catch (BookUnavailableException bue) {
             return ResponseUtils.respConflict("Book is unavailable");
         }

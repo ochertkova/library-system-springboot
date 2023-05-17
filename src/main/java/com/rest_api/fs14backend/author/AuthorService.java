@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,8 +21,11 @@ public class AuthorService {
     }
     public Author findById(UUID authorId){return authorRepo.findById(authorId).orElse(null);}
 
-    public Author findByName(String authorName){
-        return authorRepo.findByName(authorName);
+    public Author findByName(final String authorName){
+        Optional<Author> maybeAuthor = authorRepo.findByName(authorName);
+        return maybeAuthor.orElseThrow(() -> new NotFoundException(
+                "Author %s not found".formatted(authorName)
+        ));
     }
     public void deleteById(UUID authorId) {
         if (authorRepo.findById(authorId).isPresent()) {
