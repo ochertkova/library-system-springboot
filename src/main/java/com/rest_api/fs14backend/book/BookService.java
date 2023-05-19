@@ -41,7 +41,7 @@ public class BookService {
 
 
     public Book findById(UUID bookId) {
-        return bookRepo.findById(bookId).orElse(null);
+        return bookRepo.findById(bookId).orElseThrow(() -> new NotFoundException("Book not found"));
     }
 
     public void deleteById(UUID bookId) {
@@ -78,6 +78,44 @@ public class BookService {
         loanRepo.save(newLoan);
 
         return bookToBorrow;
+    }
+
+    private Book validateBookToReturn(UUID bookId) {
+        Optional<Book> maybeBook = bookRepo.findById(bookId);
+        Book bookToReturn = maybeBook.orElseThrow(() -> new NotFoundException("Book not found"));
+
+        if (bookToReturn.getStatus() == BORROWED) {
+            return bookToReturn;
+        } else {
+            throw new BookUnavailableException("This book is already available");
+        }
+    }
+    public Book returnBook(UUID bookId, UUID userId) {
+        User user = userService.findById(userId);
+        Book bookToReturn = validateBookToReturn(bookId);
+        Loan activeLoan = user.getActiveLoans()
+                .stream()
+                .filter(loan -> loan.getBook().equals(bookToReturn))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Book not found in active loans"));
+
+        bookToReturn.setStatus(AVAILABLE);
+
+        OffsetDateTime returnedDate = OffsetDateTime.now();
+        activeLoan.setReturnedDate(returnedDate);
+
+        bookRepo.save(bookToReturn);
+        loanRepo.save(activeLoan);
+
+        return bookToReturn;
+    }
+
+    public Book updateBook(UUID bookId, Book updatedData) {
+        Optional<Book> maybeBook = bookRepo.findById(bookId);
+        Book bookToUpdate = maybeBook.orElseThrow(() -> new NotFoundException("Book not found"));
+        bookToUpdate.setFields(updatedData);
+        bookRepo.save(bookToUpdate);
+        return bookToUpdate;
     }
 }
 

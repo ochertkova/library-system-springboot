@@ -17,7 +17,7 @@ public class UserMapper {
         UserDTO dto = new UserDTO();
         dto.setLoans(user.getLoans().stream().map(dbLoan -> {
             BookDTO bookDto = bookMapper.toDto(dbLoan.getBook());
-            return new UserLoanDTO(dbLoan.getBorrowDate(), dbLoan.getReturnDate(), bookDto);
+            return new UserLoanDTO(dbLoan.getBorrowDate(), dbLoan.getReturnByDate(), bookDto);
         }).collect(Collectors.toList()));
         dto.setEmail(user.getEmail());
         dto.setName(user.getName());

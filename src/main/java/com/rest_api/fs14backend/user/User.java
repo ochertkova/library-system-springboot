@@ -10,6 +10,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -44,6 +45,12 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnoreProperties("user")
     private List<Loan> loans;
+
+    public List<Loan> getActiveLoans() {
+        return loans.stream().filter(
+                loan -> loan.getReturnedDate() == null
+        ).collect(Collectors.toList());
+    }
 
     public User(String username, String password, String name, String email, Role role) {
         this.username = username;

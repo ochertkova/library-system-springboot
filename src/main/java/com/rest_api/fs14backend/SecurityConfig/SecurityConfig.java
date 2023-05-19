@@ -5,6 +5,7 @@ import com.rest_api.fs14backend.filters.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,10 +39,15 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**")
-                .permitAll()
+                .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/authors/**", "/api/v1/users/**","/api/v1/categories/**").hasRole("ADMIN")
-                .requestMatchers("/api/v1/books/**").hasAnyRole("ADMIN","USER")
+                .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
+                .requestMatchers(HttpMethod.POST,"/api/v1/books/*/borrow").hasRole("USER")
+                .requestMatchers(HttpMethod.POST,"/api/v1/books/*/return").hasRole("USER")
+                .requestMatchers(HttpMethod.POST,"/api/v1/books/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/api/v1/books/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST,"/api/v1/books").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/api/v1/books/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

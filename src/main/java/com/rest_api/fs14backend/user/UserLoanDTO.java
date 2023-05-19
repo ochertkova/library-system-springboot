@@ -10,7 +10,7 @@ public class UserLoanDTO {
     }
 
     public OffsetDateTime getReturnDate() {
-        return returnDate;
+        return returnByDate;
     }
 
     public BookDTO getBook() {
@@ -18,12 +18,12 @@ public class UserLoanDTO {
     }
 
     private OffsetDateTime borrowDate;
-    private OffsetDateTime returnDate;
+    private OffsetDateTime returnByDate;
     private BookDTO book;
 
-    public UserLoanDTO(OffsetDateTime borrowDate, OffsetDateTime returnDate, BookDTO book) {
+    public UserLoanDTO(OffsetDateTime borrowDate, OffsetDateTime returnByDate, BookDTO book) {
         this.borrowDate = borrowDate;
-        this.returnDate = returnDate;
+        this.returnByDate = returnByDate;
         this.book = book;
     }
 

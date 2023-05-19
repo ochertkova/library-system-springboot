@@ -105,4 +105,15 @@ public class Book {
         return this.getTitle().toLowerCase().contains(searchLowerCase)
                 || this.getDescription().toLowerCase().contains(searchLowerCase);
     }
+
+    public void setFields(Book otherBook) {
+        this.ISBN = otherBook.getISBN();
+        this.title = otherBook.getTitle();
+        this.description = otherBook.getDescription();
+        this.status = otherBook.getStatus();
+        this.publisher = otherBook.getPublisher();
+        this.publishedDate = otherBook.getPublishedDate();
+        this.category = otherBook.getCategory();
+        this.setAuthors(otherBook.getAuthors());
+    }
 }

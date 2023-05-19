@@ -46,7 +46,7 @@ public class UserController {
                 .map(loans -> loans.stream().map(
                         dbLoan -> {
                             BookDTO bookDto = bookMapper.toDto(dbLoan.getBook());
-                            return new UserLoanDTO(dbLoan.getBorrowDate(), dbLoan.getReturnDate(), bookDto);
+                            return new UserLoanDTO(dbLoan.getBorrowDate(), dbLoan.getReturnByDate(), bookDto);
                         }
                 ).collect(Collectors.toList()));
     }

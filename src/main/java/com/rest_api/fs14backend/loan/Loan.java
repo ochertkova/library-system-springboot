@@ -28,13 +28,13 @@ public class Loan {
 
     @Column
     private OffsetDateTime borrowDate;
-    private OffsetDateTime returnDate;
+    private OffsetDateTime returnByDate;
     private OffsetDateTime returnedDate;
 
-    public Loan(User user, Book book, OffsetDateTime borrowDate, OffsetDateTime returnDate) {
+    public Loan(User user, Book book, OffsetDateTime borrowDate, OffsetDateTime returnByDate) {
         this.user = user;
         this.book = book;
         this.borrowDate = borrowDate;
-        this.returnDate = returnDate;
+        this.returnByDate = returnByDate;
     }
 }

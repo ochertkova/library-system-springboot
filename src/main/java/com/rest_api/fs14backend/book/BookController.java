@@ -37,7 +37,7 @@ public class BookController {
     @GetMapping
     public List<BookDTO> getAll(@RequestParam @Nullable final String search) {
         List<Book> result;
-        if ( search == null) {
+        if (search == null) {
             result = bookService.getAllBooks();
         } else {
             result = bookService.searchBooks(search);
@@ -48,7 +48,7 @@ public class BookController {
                 .toList();
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<?> addOne(@RequestBody BookDTO bookDto) {
         try {
             Category category = categoryService
@@ -81,6 +81,21 @@ public class BookController {
         }
     }
 
+    @PostMapping("/{id}/return")
+    public ResponseEntity<?> returnBook(@PathVariable("id") String pathId, @AuthenticationPrincipal LibraryUserDetails authUser) {
+        try {
+            UUID bookId = UUID.fromString(pathId);
+            Book returnedBook = bookService.returnBook(bookId, authUser.getUserId());
+            return ResponseEntity.ok(returnedBook);
+        } catch (IllegalArgumentException iea) {
+            return ResponseUtils.respBadRequest("Invalid book id");
+        } catch (NotFoundException nfe) {
+            return ResponseUtils.respNotFound(nfe.getMessage());
+        } catch (BookUnavailableException bue) {
+            return ResponseUtils.respConflict("Book is unavailable");
+        }
+    }
+
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getBookById(@PathVariable("id") UUID id) {
         Optional<Book> payload = Optional.ofNullable(bookService.findById(id));
@@ -90,6 +105,25 @@ public class BookController {
         return ResponseEntity.ok(payload);
     }
 
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<?> updateBookById(@PathVariable("id") UUID id, @RequestBody BookDTO bookDto) {
+        try {
+            Category category = categoryService
+                    .findByName(bookDto.getCategory())
+                    .orElseThrow(() -> new NotFoundException("Category not found"));
+            List<Author> authors = bookDto
+                    .getAuthors()
+                    .stream()
+                    .map(authorService::findByName)
+                    .collect(Collectors.toList());
+            Book updatedBook = bookService.updateBook(id,
+                    bookMapper.toBook(bookDto, category, authors));
+            return ResponseEntity.ok(bookMapper.toDto(updatedBook));
+        } catch (NotFoundException nfe) {
+            return ResponseUtils.respNotFound(nfe.getMessage());
+        }
+    }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteBookById(@PathVariable("id") UUID id) {
         try {
@@ -97,7 +131,6 @@ public class BookController {
             return ResponseEntity.ok(null);
         } catch (NotFoundException nfe) {
             return ResponseUtils.respNotFound(nfe.getMessage());
-
         }
     }
 
