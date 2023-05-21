@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,15 +39,20 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
         User user = userService.findByUsername(authRequest.getUsername());
-        if(user == null){
+        if (user == null) {
             return ResponseUtils.respNotFound("Username was not found. Please sign up");
         }
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authRequest.getUsername(),
-                        authRequest.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authRequest.getUsername(),
+                            authRequest.getPassword()
+                    )
+            );
+        } catch (AuthenticationException ae) {
+            return ResponseUtils.respBadRequest("Incorrect password");
+        }
+
         String token = jwtUtils.generateToken(user);
         Map<String, String> payload = Map.of("token", token,
                 "role", user.getRole().toString(),

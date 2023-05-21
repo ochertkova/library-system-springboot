@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -37,17 +38,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .and().csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/v1/authors/**", "/api/v1/users/**","/api/v1/categories/**").hasRole("ADMIN")
+                .requestMatchers("/api/v1/authors/**", "/api/v1/users/**", "/api/v1/categories/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
-                .requestMatchers(HttpMethod.POST,"/api/v1/books/*/borrow").hasRole("USER")
-                .requestMatchers(HttpMethod.POST,"/api/v1/books/*/return").hasRole("USER")
-                .requestMatchers(HttpMethod.POST,"/api/v1/books/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT,"/api/v1/books/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST,"/api/v1/books").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE,"/api/v1/books/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/v1/books/*/borrow").hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/api/v1/books/*/return").hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/api/v1/books/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/books/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/v1/books").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/books/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

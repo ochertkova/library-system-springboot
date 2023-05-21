@@ -20,6 +20,7 @@ public class BookMapper {
                 newBook.getISBN(),
                 newBook.getTitle(),
                 newBook.getDescription(),
+                newBook.getBookCoverLink(),
                 Book.Status.valueOf(newBook.getStatus()),
                 newBook.getPublisher()
         );

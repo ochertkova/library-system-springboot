@@ -64,10 +64,11 @@ public class Book {
     @Setter
     private List<Author> authors;
 
-    public Book(long ISBN, String title, String description, Status status, String publisher) {
+    public Book(long ISBN, String title, String description, String bookCoverlink, Status status, String publisher) {
         this.ISBN = ISBN;
         this.title = title;
         this.description = description;
+        this.bookCoverLink = bookCoverlink;
         this.status = status;
         this.publisher = publisher;
     }
@@ -110,6 +111,7 @@ public class Book {
         this.ISBN = otherBook.getISBN();
         this.title = otherBook.getTitle();
         this.description = otherBook.getDescription();
+        this.bookCoverLink = otherBook.getBookCoverLink();
         this.status = otherBook.getStatus();
         this.publisher = otherBook.getPublisher();
         this.publishedDate = otherBook.getPublishedDate();
