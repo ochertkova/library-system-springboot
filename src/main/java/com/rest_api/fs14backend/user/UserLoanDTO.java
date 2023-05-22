@@ -9,7 +9,7 @@ public class UserLoanDTO {
         return borrowDate;
     }
 
-    public OffsetDateTime getReturnDate() {
+    public OffsetDateTime getReturnByDate() {
         return returnByDate;
     }
 

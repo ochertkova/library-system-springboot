@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .and().csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/v1/myaccount/**").hasRole("USER")
                 .requestMatchers("/api/v1/authors/**", "/api/v1/users/**", "/api/v1/categories/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/books/*/borrow").hasRole("USER")
