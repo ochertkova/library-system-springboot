@@ -1,5 +1,6 @@
 package com.rest_api.fs14backend.author;
 
+import com.rest_api.fs14backend.exceptions.EntityAlreadyExists;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,13 @@ public class AuthorService {
     @Autowired
     private AuthorRepository authorRepo;
     public Author addOne(Author author) {
-        return authorRepo.save(author);
+        Optional<Author> authorToAdd = authorRepo.findByName(author.getName());
+        if (authorToAdd.isEmpty()) {
+            return authorRepo.save(author);
+        } else {
+            throw new EntityAlreadyExists("Author already exists");
+        }
+
     }
 
     public List<Author> getAllAuthors() {
@@ -28,7 +35,7 @@ public class AuthorService {
         ));
     }
     public void deleteById(UUID authorId) {
-        Optional<Author> authorToDelete = authorRepo.findById(authorId);;
+        Optional<Author> authorToDelete = authorRepo.findById(authorId);
         if (authorToDelete.isPresent()) {
             authorRepo.deleteById(authorId);
         } else {

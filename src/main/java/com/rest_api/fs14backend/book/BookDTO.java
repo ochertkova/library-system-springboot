@@ -29,6 +29,7 @@ public class BookDTO {
     @JsonProperty("authors")
     private List<String> authors;
 
+
     public BookDTO(UUID id, long ISBN, String title, String publisher, String description, String bookCoverLink, String status, String category, List<String> authors) {
         this.id = id;
         this.ISBN = ISBN;

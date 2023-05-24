@@ -11,6 +11,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -112,7 +113,7 @@ public class Book {
         this.title = otherBook.getTitle();
         this.description = otherBook.getDescription();
         this.bookCoverLink = otherBook.getBookCoverLink();
-        this.status = otherBook.getStatus();
+        this.status = Optional.ofNullable(otherBook.getStatus()).orElse(this.status);
         this.publisher = otherBook.getPublisher();
         this.publishedDate = otherBook.getPublishedDate();
         this.category = otherBook.getCategory();

@@ -7,6 +7,7 @@ import com.rest_api.fs14backend.category.Category;
 import com.rest_api.fs14backend.category.CategoryService;
 import com.rest_api.fs14backend.exceptions.BookUnavailableException;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
+import com.rest_api.fs14backend.exceptions.RelatedEntityException;
 import com.rest_api.fs14backend.utils.ResponseUtils;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +103,7 @@ public class BookController {
         if (payload.isEmpty()) {
             return ResponseUtils.respNotFound("Book not found");
         }
-        return ResponseEntity.ok(payload);
+        return ResponseEntity.ok(bookMapper.toDto(payload.get()));
     }
 
     @PutMapping(path = "/{id}")
@@ -116,8 +117,7 @@ public class BookController {
                     .stream()
                     .map(authorService::findByName)
                     .collect(Collectors.toList());
-            Book updatedBook = bookService.updateBook(id,
-                    bookMapper.toBook(bookDto, category, authors));
+            Book updatedBook = bookService.updateBook(id, bookMapper.toBook(bookDto, category, authors));
             return ResponseEntity.ok(bookMapper.toDto(updatedBook));
         } catch (NotFoundException nfe) {
             return ResponseUtils.respNotFound(nfe.getMessage());
@@ -131,6 +131,8 @@ public class BookController {
             return ResponseEntity.ok(null);
         } catch (NotFoundException nfe) {
             return ResponseUtils.respNotFound(nfe.getMessage());
+        }catch(RelatedEntityException ree){
+            return ResponseUtils.respConflict("Book has related loans");
         }
     }
 

@@ -1,5 +1,6 @@
 package com.rest_api.fs14backend.author;
 
+import com.rest_api.fs14backend.exceptions.EntityAlreadyExists;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import com.rest_api.fs14backend.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,14 @@ public class AuthorController {
         return ResponseEntity.ok(payload);
     }
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<?> addOne(@RequestBody Author author) {
-        Author payload =  authorService.addOne(author);
-        return ResponseEntity.ok(payload);
+        try {
+            Author payload =  authorService.addOne(author);
+            return ResponseEntity.ok(payload);
+        } catch (EntityAlreadyExists eae){
+            return ResponseUtils.respConflict(eae.getMessage());
+        }
     }
 
     @GetMapping(path = "/{id}")

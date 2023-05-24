@@ -2,6 +2,7 @@ package com.rest_api.fs14backend.book;
 
 import com.rest_api.fs14backend.exceptions.BookUnavailableException;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
+import com.rest_api.fs14backend.exceptions.RelatedEntityException;
 import com.rest_api.fs14backend.loan.Loan;
 import com.rest_api.fs14backend.loan.LoanRepository;
 import com.rest_api.fs14backend.user.User;
@@ -35,8 +36,9 @@ public class BookService {
     public List<Book> getAllBooks() {
         return bookRepo.findAll();
     }
+
     public List<Book> searchBooks(String search) {
-        return bookRepo.searchBooks(search.toLowerCase());
+        return bookRepo.searchBooks(search);
     }
 
 
@@ -45,8 +47,12 @@ public class BookService {
     }
 
     public void deleteById(UUID bookId) {
-        Optional<Book> bookToDelete;
-        if (bookRepo.findById(bookId).isPresent()) {
+        Optional<Book> bookToDelete = bookRepo.findById(bookId);
+        List<Loan> bookLoans = loanRepo.findAllByBookId(bookId);
+        if (!bookLoans.isEmpty()) {
+            throw new RelatedEntityException("Book has related loans");
+        }
+        if (bookToDelete.isPresent()) {
             bookRepo.deleteById(bookId);
         } else {
             throw new NotFoundException("Book not found");
@@ -90,6 +96,7 @@ public class BookService {
             throw new BookUnavailableException("This book is already available");
         }
     }
+
     public Book returnBook(UUID bookId, UUID userId) {
         User user = userService.findById(userId);
         Book bookToReturn = validateBookToReturn(bookId);
