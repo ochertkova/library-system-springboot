@@ -1,48 +1,28 @@
-# Backend Assignment (Team work)
+# Back-end for Library System
 
-`Choose one of the assignments based on what you've been working on so far`
+This is a simple App which I developed as a Front-end assignment for Integrify Full Stack program. In the project I use mock data stored locally.
 
-<br />
+The App is deployed at:
+https://library-system.herokuapp.com/
 
-### Option 1:
+The Front-end repo:
+https://github.com/ochertkova/library-system-react
 
-Implement REST APIs for the library management system
+Tech Stack: Java SpringBoot.
 
-### Option 2:
+## Setup & Installation
 
-Implement REST APIs for the e-commerce site
+Clone the repo.
 
-## What should you be doing
+```bash
+git clone <repo-url>
+```
+## Running The App
 
-implement a basic endpoints as a team and gradually make it more complex, like data modeling.
+To run the app locally:
 
-it should be a functional backend with real database persistence
+1. Run the Docker container: docker-compose.yml
+2. Run Fs14BackendApplication.java
 
-Database to use: SQL over NoSQL. so either PostgreSQL or MySQL
 
-<br />
 
-### What are the things should be done for this backend assignment
-
-1. build basic tables schema
-2. basic routes CRUD requests
-3. build references between table
-4. build/refactor routes to fulfill the referencing (create book with an author/s id)
-5. handling errors and request validation
-6. Authentication/authoraization
-
-<br />
-
-`Resources/Topics that could help you:`
-
-1. [Learn DTO pattern](https://www.youtube.com/watch?v=THv-TI1ZNMk&t=1526s)
-2. [How to connect PostgreSQL and Docker to Spring Boot application](https://www.youtube.com/watch?v=A8qZUF-GcKo)
-
-<br />
-
-`How to proceed:`
-
-- Group leader would fork this repo
-- Group member would clone the origin (the leader's forked repo)
-- all of you work from that origin
-- leader open a PR as soon as you have something to show and wants a review

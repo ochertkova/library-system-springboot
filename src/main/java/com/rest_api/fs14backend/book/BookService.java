@@ -38,7 +38,7 @@ public class BookService {
     }
 
     public List<Book> searchBooks(String search) {
-        return bookRepo.searchBooks(search);
+        return bookRepo.searchBooks(search.toLowerCase());
     }
 
 
