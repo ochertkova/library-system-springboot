@@ -4,7 +4,7 @@ This is a simple Java Application which I developed as a Back-end assignment for
 
 Tech Stack: Java SpringBoot, PostgreSQL.
 
-The App is deployed at:
+The Fullstack App is deployed at:
 https://library-system.herokuapp.com/
 
 The Front-end repo:
