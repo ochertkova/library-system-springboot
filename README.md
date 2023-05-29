@@ -1,6 +1,6 @@
 # Back-end for Library System
 
-This is a simple App which I developed as a Back-end assignment for Integrify Full Stack program.
+This is a simple Java Application which I developed as a Back-end assignment for Integrify Full Stack program.
 
 Tech Stack: Java SpringBoot, PostgreSQL.
 
